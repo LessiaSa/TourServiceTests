@@ -33,6 +33,7 @@ public class CreditPageTests {
         val creditPage = new CreditPage();
         creditPage.detailsCard(card);
         creditPage.checkSuccessNotification();
+        Assertions.assertEquals("APPROVED",SQLHelper.getCreditStatus());
     }
 
 
