@@ -15,16 +15,18 @@ import static com.codeborne.selenide.Selenide.$$;
 
 public class CreditPage {
     private SelenideElement heading = $$("h3").findBy(Condition.text("Кредит по данным карты"));
-    private SelenideElement cardNumberField = $("input[placeholder='0000 0000 0000 0000']");
-    private SelenideElement monthField = $("input[placeholder='08']");
-    private SelenideElement yearField = $("input[placeholder='22']");
-    private SelenideElement holderField = $(byXpath("/html/body/div/div/form/fieldset/div[3]/span/span[1]/span/span/span[2]/input"));
-    private SelenideElement cvcField = $("input[placeholder='999']");
+    private SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000'] input");
+    private SelenideElement monthField = $("[placeholder='08'] input");
+    private SelenideElement yearField = $("[placeholder='22'] input");
+    private SelenideElement holderField = $("[autocomplete='on'] input");
+    private SelenideElement cvcField = $("[placeholder='999'] input");
     private SelenideElement continueButton = $$("button").findBy(Condition.text("Продолжить"));
+    private SelenideElement errorNotification = $("['error-notification'].notification__content");
 
-    public CreditPage() {
-        heading.shouldBe(visible);
+    public void verifyErrorNotification(String expectedText) {
+        errorNotification.shouldHave(exactText(expectedText)).shouldBe(visible);
     }
+
 
     public void detailsCard(Card card) {
         cardNumberField.setValue(card.getNumber());
@@ -35,9 +37,6 @@ public class CreditPage {
         continueButton.click();
     }
 
-    public void detailsCard() {
-        continueButton.click();
-    }
 
     public void checkSuccessNotification() {
         $(".notification__content").shouldHave(exactText("Операция одобрена Банком.")).shouldBe(visible);

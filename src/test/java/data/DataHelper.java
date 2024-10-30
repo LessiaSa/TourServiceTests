@@ -14,6 +14,7 @@ import java.util.Locale;
 
 public class DataHelper {
 
+
     private DataHelper () {
     }
 
@@ -99,18 +100,26 @@ public class DataHelper {
         return faker.lorem().characters(1);
     }
 
-    public static String getValidCvc() {
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
-        return fakeValuesService.numerify("###");
+    public static CodeCVC generateRandomCodeCVC() {
+        Faker faker = new Faker();
+        return new CodeCVC(faker.numerify("###"));
+
     }
 
-    public static String getCvcWithOneDigit() {
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
-        return fakeValuesService.numerify("#");
+    public static CodeCVC generateRandomCodeCVCOneDigit() {
+        Faker faker = new Faker();
+        return new CodeCVC(faker.numerify("#"));
     }
 
-    public static String getCvcWithTwoDigits() {
-        FakeValuesService fakeValuesService = new FakeValuesService(new Locale("en"), new RandomService());
-        return fakeValuesService.numerify("##");
+    public static CodeCVC generateRandomCodeCVCTwoDigit() {
+        Faker faker = new Faker();
+        return new CodeCVC(faker.numerify("##"));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class CodeCVC {
+        String code;
     }
 }

@@ -14,6 +14,7 @@ import static data.DataHelper.*;
 import static data.SQLHelper.cleanDatabase;
 
 public class CreditPageTests {
+    CreditPage creditPage;
 
     @AfterAll
     static void tearDownAll() {
@@ -27,8 +28,9 @@ public class CreditPageTests {
     }
 
     @Test
-    @Order(1)
-    void shouldSuccessNotification() throws SQLException {
+    @DisplayName("Успешная обработка данных")
+    void shouldSuccessfulDataProcessing() {
+
 
     }
 
