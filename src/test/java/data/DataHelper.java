@@ -1,8 +1,6 @@
 package data;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,12 +24,13 @@ public class DataHelper {
         return "5555 6666 7777 8888";
     }
 
+    //текущий месяц
     public static String getCurrentMonth() {
         LocalDate localDate = LocalDate.now();
         return String.format("%02d", localDate.getMonthValue());
     }
 
-
+    // прошлый месяц
     public static String getLastMonth() {
         LocalDate localDate = LocalDate.now();
         LocalDate lastMonth = localDate.minusMonths(1);
@@ -40,15 +39,27 @@ public class DataHelper {
         return monthValue;
     }
 
+    //следующий месяц
+    public static String getNextMonth() {
+        LocalDate localDate = LocalDate.now();
+        LocalDate nextMonth = localDate.plusMonths(1);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM");
+        String monthValue = nextMonth.format(formatter);
+        return monthValue;
+    }
+
+    // текущий год
     public static String getCurrentYear() {
         return String.format("%ty", Year.now());
     }
 
+    //в прошлом году
     public static String getLastYear() {
         LocalDate localDate = LocalDate.now();
         return String.format("%ty", localDate.minusYears(1));
     }
 
+    //в следующем году
     public static String getNextYear() {
         LocalDate localDate = LocalDate.now();
         return String.format("%ty", localDate.plusYears(1));
@@ -95,23 +106,24 @@ public class DataHelper {
         return faker.number().digits(9);
     }
 
+    //имя из одной буквы
     public static String getNameWithOneLetter() {
         Faker faker = new Faker();
         return faker.lorem().characters(1);
     }
 
-    public static CodeCVC generateRandomCodeCVC() {
+    public static CodeCVC getRandomCodeCVC() {
         Faker faker = new Faker();
         return new CodeCVC(faker.numerify("###"));
 
     }
 
-    public static CodeCVC generateRandomCodeCVCOneDigit() {
+    public static CodeCVC getRandomCodeCVCOneDigit() {
         Faker faker = new Faker();
         return new CodeCVC(faker.numerify("#"));
     }
 
-    public static CodeCVC generateRandomCodeCVCTwoDigit() {
+    public static CodeCVC getRandomCodeCVCTwoDigit() {
         Faker faker = new Faker();
         return new CodeCVC(faker.numerify("##"));
     }

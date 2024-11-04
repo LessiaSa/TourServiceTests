@@ -13,7 +13,7 @@ public class StartPage {
         heading.shouldHave(text("Путешествие дня")).shouldBe(visible);
     }
 
-    public CreditPage buyInCredit() {
+    public static CreditPage buyOnCredit() {
         SelenideElement creditButton = $$("button").findBy(text("Купить в кредит"));
         creditButton.click();
         return new CreditPage();

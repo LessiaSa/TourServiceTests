@@ -11,30 +11,57 @@ import java.sql.SQLException;
 
 public class SQLHelper {
 
-    private static final QueryRunner QUERY_RUNNER = new QueryRunner();
+    private static final String url = System.getProperty("db.url");
+    private static final String username = System.getProperty("username");
+    private static final String password = System.getProperty("password");
+
+    private static final QueryRunner runner = new QueryRunner();
 
     private SQLHelper() {
     }
 
-    //задаем параметры подключения к базе данных
-    private static Connection getConn() throws SQLException {
-        return DriverManager.getConnection(System.getProperty("db.url"), "app", "pass");
+    private static Connection getConnMySql() throws SQLException {
+        return DriverManager.getConnection(url,username,password);
     }
 
-    //метод для очистки базы данных
+
+
     @SneakyThrows
-    public static void cleanDatabase() {
-        var connection = getConn();
-        QUERY_RUNNER.execute(connection,"DELETE FROM auth_codes");
-        QUERY_RUNNER.execute(connection,"DELETE FROM card_transactions");
-        QUERY_RUNNER.execute(connection,"DELETE FROM cards");
-        QUERY_RUNNER.execute(connection,"DELETE FROM users");
+    public static String getLastPayUserStatusMySQL() {
+        Thread.sleep(10000);
+        var payStatus = "SELECT status FROM payment_entity order by created desc LIMIT 1";
+        var conn = getConnMySql();
+        return runner.query(conn, payStatus, new ScalarHandler<>());
     }
-    //метод для очистки таблицы - когда надо сбросить счетчик
+
     @SneakyThrows
-    public static void cleanAuthCodes() {
-        var connection = getConn();
-        QUERY_RUNNER.execute(connection,"DELETE FROM auth_codes");
+    public static int getLastPayUserAmountMySQL() {
+        Thread.sleep(10000);
+        var amount = "SELECT amount FROM payment_entity order by created desc LIMIT 1";
+        var conn = getConnMySql();
+        return runner.query(conn, amount, new ScalarHandler<>());
+    }
+
+    @SneakyThrows
+    public static String getLastPayOnCreditUserStatusMySQL() {
+        Thread.sleep(10000);
+        var creditStatus = "SELECT status FROM credit_request_entity order by created desc LIMIT 1";
+        var conn = getConnMySql();
+        return runner.query(conn, creditStatus, new ScalarHandler<>());
+    }
+    @SneakyThrows
+    public static void cleanTables() throws SQLException {
+
+        val deleteOrderEntity = "DELETE FROM order_entity";
+        val deletePaymentEntity = "DELETE FROM payment_entity";
+        val deleteCreditRequestEntity = "DELETE FROM credit_request_entity";
+        val countSQL = "SELECT COUNT(*) FROM order_entity";
+        val runner = new QueryRunner();
+        val conn = DriverManager.getConnection(
+                url, username, password);
+        runner.update(conn, deleteOrderEntity);
+        runner.update(conn, deletePaymentEntity);
+        runner.update(conn, deleteCreditRequestEntity);
+        runner.query(conn, countSQL, new ScalarHandler<>());
     }
 }
-

@@ -4,37 +4,34 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import data.Card;
-import java.time.Duration;
-
-
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class CreditPage {
-    private SelenideElement heading = $$("h3").findBy(Condition.text("Кредит по данным карты"));
-    private SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000'] input");
-    private SelenideElement monthField = $("[placeholder='08'] input");
-    private SelenideElement yearField = $("[placeholder='22'] input");
-    private SelenideElement holderField = $("[autocomplete='on'] input");
-    private SelenideElement cvcField = $("[placeholder='999'] input");
-    private SelenideElement continueButton = $$("button").findBy(Condition.text("Продолжить"));
-    private SelenideElement errorNotification = $("['error-notification'].notification__content");
+    private static SelenideElement heading = $$("h3").findBy(Condition.text("Кредит по данным карты"));
+    private static SelenideElement cardNumberField = $("[placeholder='0000 0000 0000 0000'] input");
+    private static SelenideElement monthField = $("[placeholder='08'] input");
+    private static SelenideElement yearField = $("[placeholder='22'] input");
+    private static SelenideElement holderField = $("[autocomplete='on'] input");
+    private static SelenideElement cvcField = $("[placeholder='999'] input");
+    private static SelenideElement continueButton = $$("button").findBy(Condition.text("Продолжить"));
+    private static SelenideElement errorNotification = $("['error-notification'].notification__content");
 
     public void verifyErrorNotification(String expectedText) {
         errorNotification.shouldHave(exactText(expectedText)).shouldBe(visible);
     }
 
 
-    public void detailsCard(Card card) {
+    public static StartPage detailsCard(Card card) {
         cardNumberField.setValue(card.getNumber());
         monthField.setValue(card.getMonth());
         yearField.setValue(card.getYear());
         holderField.setValue(card.getHolderName());
         cvcField.setValue(card.getCvc());
         continueButton.click();
+        return new StartPage();
     }
 
 
