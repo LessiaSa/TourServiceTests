@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static java.lang.Long.parseLong;
+
 public class SQLHelper {
 
     private static final String url = System.getProperty("db.url");
@@ -25,7 +27,7 @@ public class SQLHelper {
     }
 
 
-
+    //последний платящий пользователь
     @SneakyThrows
     public static String getLastPayUserStatusMySQL() {
         Thread.sleep(10000);
@@ -34,6 +36,7 @@ public class SQLHelper {
         return runner.query(conn, payStatus, new ScalarHandler<>());
     }
 
+    //последняя сумма оплаты
     @SneakyThrows
     public static int getLastPayUserAmountMySQL() {
         Thread.sleep(10000);
@@ -42,6 +45,7 @@ public class SQLHelper {
         return runner.query(conn, amount, new ScalarHandler<>());
     }
 
+    //статус последнего пользователя с оплатой в кредит
     @SneakyThrows
     public static String getLastPayOnCreditUserStatusMySQL() {
         Thread.sleep(10000);
@@ -63,5 +67,17 @@ public class SQLHelper {
         runner.update(conn, deletePaymentEntity);
         runner.update(conn, deleteCreditRequestEntity);
         runner.query(conn, countSQL, new ScalarHandler<>());
+    }
+
+    //есть ли запись
+    @SneakyThrows
+    public static String countRecords() {
+        val countSQL = "SELECT COUNT(*) FROM order_entity";
+        val runner = new QueryRunner();
+        Long count = Long.valueOf(" ");
+        val conn = DriverManager.getConnection(
+                url, username, password);
+        count = runner.query(conn, countSQL, new ScalarHandler<>());
+        return  Long.toString(count);
     }
 }

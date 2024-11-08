@@ -3,8 +3,9 @@ package data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
-    @Data
+@Data
     @AllArgsConstructor
     @NoArgsConstructor
 
@@ -15,4 +16,6 @@ import lombok.NoArgsConstructor;
         private String holderName;
         private String cvc;
     }
+
+
 

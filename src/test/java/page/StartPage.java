@@ -1,28 +1,22 @@
 package page;
 import com.codeborne.selenide.SelenideElement;
+import data.Card;
+import data.DataHelper;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$$;
 
 public class StartPage {
-    private final SelenideElement heading = $("[App_appContainer__3jRx1]");
+    private static final SelenideElement heading = $$("h2").findBy(text("Путешествие дня"));
+    private static final SelenideElement creditButton = $$("button").findBy(exactText("Купить в кредит"));
 
     public StartPage() {
-        heading.shouldHave(text("Путешествие дня")).shouldBe(visible);
+        heading.shouldBe(visible);
     }
 
-    public static CreditPage buyOnCredit() {
-        SelenideElement creditButton = $$("button").findBy(text("Купить в кредит"));
+   public static void openCreditPage() {
         creditButton.click();
-        return new CreditPage();
-    }
-
-    public PaymentPage buy() {
-        SelenideElement buyButton = $$("button").findBy(text("Купить"));
-        buyButton.click();
-        return new PaymentPage();
-    }
+       heading.shouldBe(visible);
+   }
 
 }

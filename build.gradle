@@ -21,6 +21,7 @@ dependencies {
     testImplementation 'mysql:mysql-connector-java:8.0.30'
     implementation group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
 }
 
 test {
