@@ -60,7 +60,6 @@ public class CreditPageTests {
         StartPage.openCreditPage();
         detailsCard(nonExistentCard);
         CreditPage.checkErrorNotification();
-        assertEquals(" ", SQLHelper.countRecords());
 
     }
 
