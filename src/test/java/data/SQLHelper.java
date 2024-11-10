@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static java.lang.Long.parseLong;
-
 public class SQLHelper {
 
     private static final String url = System.getProperty("db.url");
@@ -23,7 +21,7 @@ public class SQLHelper {
     }
 
     private static Connection getConnMySql() throws SQLException {
-        return DriverManager.getConnection(url,username,password);
+        return DriverManager.getConnection(url, username, password);
     }
 
 
@@ -53,6 +51,7 @@ public class SQLHelper {
         var conn = getConnMySql();
         return runner.query(conn, creditStatus, new ScalarHandler<>());
     }
+
     @SneakyThrows
     public static void cleanTables() throws SQLException {
 
@@ -78,6 +77,7 @@ public class SQLHelper {
         val conn = DriverManager.getConnection(
                 url, username, password);
         count = runner.query(conn, countSQL, new ScalarHandler<>());
-        return  Long.toString(count);
+        return Long.toString(count);
     }
+
 }

@@ -13,115 +13,115 @@ import java.util.Locale;
 public class DataHelper {
 
 
-    private DataHelper () {
+    private DataHelper() {
     }
 
     public static Card getApprovedNumber() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     public static Card getDeclinedNumber() {
-        return new Card("5555 6666 7777 8888", getCurrentMonth(), getCurrentYear(),getRandomUserEn(), getRandomCodeCVC());
+        return new Card("5555 6666 7777 8888", getCurrentMonth(), getCurrentYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //несуществующая карта
     public static Card getNonExistentNumberCard() {
-        return new Card("1234 2222 3333 4444", getCurrentMonth(), getCurrentYear(),getRandomUserEn(), getRandomCodeCVC());
+        return new Card("1234 2222 3333 4444", getCurrentMonth(), getCurrentYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //недостающее количество символов в номере карты
     public static Card getMissingNumberOfCharactersInTheCardNumber() {
-       return new Card("1111 2222 3333 444", getNextMonth(), getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 444", getNextMonth(), getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //незаполненое поле"Номер карты"
     public static Card getEmptyFieldCardNumber() {
-        return new Card(" ", getNextMonth(), getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card(" ", getNextMonth(), getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //невалидный месяц - два 00
     public static Card getThereAreTwoZerosInTheMonthField() {
-        return new Card("1111 2222 3333 4444","00",getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", "00", getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //в поле"Месяц" одна цифра -0
     public static Card getMonthFieldOneDigitIsZero() {
-        return new Card("1111 2222 3333 4444","0", getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", "0", getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //в поле "Месяц" несуществующий месяц - цифры
     public static Card getThereIsANonEssentialValueInTheField() {
-        return new Card("1111 2222 3333 4444", "17", getCurrentYear(),getRandomUserEn(), getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", "17", getCurrentYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //в поле "Месяц" истекший срок действия карты - прошлый месяц
     public static Card getTheLastMonth() {
-        return new Card("1111 2222 3333 4444",getLastMonth(), getCurrentYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getLastMonth(), getCurrentYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //пустое поле "Месяц"
     public static Card getEmptyMonthField() {
-        return new Card("1111 2222 3333 4444"," ", getNextYear(), getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", " ", getNextYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //прошедший год в поле "Год"
     public static Card getLastYearInTheYearField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), getLastYear(),getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getLastYear(), getRandomUserEn(), getRandomCodeCVC());
     }
 
     //пустое поле "Год"
     public static Card getEmptyYearField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), " ", getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), " ", getRandomUserEn(), getRandomCodeCVC());
     }
 
     //далеко отстоящая дата из будущего
     public static Card getAFarOffDate() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),"89", getRandomUserEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), "89", getRandomUserEn(), getRandomCodeCVC());
     }
 
     //в поле "Владелец" только имя
     public static Card getInTheOwnerFieldOnlyTheName() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(),getNameEn(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getNameEn(), getRandomCodeCVC());
     }
 
     //в поле "Владелец" имя и фамилия через дефис
     public static Card getFirstAndLastNamesSeparatedByHyphens() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear(), getNameEn() + "-" + getSurnameEn(), getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getNameEn() + "-" + getSurnameEn(), getRandomCodeCVC());
     }
 
     //имя и фамилия в количестве 200 букв
     public static Card getHolderName200Letters() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear(), getTooLongName(), getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getTooLongName(), getRandomCodeCVC());
     }
 
     //в поле "Владелец" только цифры
     public static Card getThereAreOnlyNumbersInTheOwnerField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear(),getNumbersUsed() + " " + getNumbersUsed(),getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getNumbersUsed() + " " + getNumbersUsed(), getRandomCodeCVC());
     }
 
     //в поле "Владелец" одна буква
     public static Card getThereIsOneLetterInTheOwnerField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear(),getNameWithOneLetter(), getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getNameWithOneLetter(), getRandomCodeCVC());
     }
 
     //пустое поле "Владелец"
     public static Card getEmptyOwnerField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear()," ", getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), " ", getRandomCodeCVC());
     }
 
     //вместо имени и фамилии - спецсимволы
     public static Card getSpecialCharactersInsteadOfFirstAndLastNames() {
-        return new Card("1111 2222 3333 4444", getNextMonth(),getNextYear(),"^%&#@*!" + " " + "*#@^%$", getRandomCodeCVC());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), "^%&#@*!" + " " + "*#@^%$", getRandomCodeCVC());
     }
 
     //в поле CVC одна цифра
     public static Card getThereIsCVCOneDigitInTheField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(),getRandomCodeCVCOneDigit());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(), getRandomCodeCVCOneDigit());
     }
 
     //в поле CVC две цифры
     public static Card getThereAreTwoDigitsInTheField() {
-        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(),getRandomCodeCVCTwoDigit());
+        return new Card("1111 2222 3333 4444", getNextMonth(), getNextYear(), getRandomUserEn(), getRandomCodeCVCTwoDigit());
     }
 
     //поле CVC пустое
@@ -200,7 +200,7 @@ public class DataHelper {
     }
 
     private static String getRandomUserRu() {
-        Faker faker= new Faker(new Locale("ru"));
+        Faker faker = new Faker(new Locale("ru"));
         return faker.name().firstName() + " " + faker.name().lastName();
     }
 

@@ -6,16 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Value;
 
 @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 
-    public class Card {
-        private String number;
-        private String month;
-        private String year;
-        private String holderName;
-        private String cvc;
-    }
+public class Card {
+    private String number;
+    private String month;
+    private String year;
+    private String holderName;
+    private String cvc;
+}
 
 
 

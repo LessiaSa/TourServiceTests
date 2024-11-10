@@ -1,24 +1,32 @@
 package tests;
 
+import com.codeborne.selenide.logevents.SelenideLogger;
 import data.DataHelper;
 import data.SQLHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import page.CreditPage;
 import page.StartPage;
-import org.junit.jupiter.api.*;
+
 import java.sql.SQLException;
+
 import static com.codeborne.selenide.Selenide.open;
 import static data.SQLHelper.cleanTables;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static page.CreditPage.detailsCard;
 
 
 public class CreditPageTests {
+    private final CreditPage creditPage = new CreditPage();
+    private final StartPage startPage = new StartPage();
 
-    //для очистки базы данных после выполнения всех автотестов(после этого надо перезапустить джарник
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
     @AfterAll
-    static void tearDownAll() throws SQLException {
-        cleanTables();
+    static void tearDownAllAllure() {
+        SelenideLogger.removeListener("allure");
     }
 
     @BeforeAll
@@ -27,229 +35,215 @@ public class CreditPageTests {
     }
 
 
+    //для очистки базы данных после выполнения всех автотестов(после этого надо перезапустить джарник
+    @AfterAll
+    static void tearDownAll() throws SQLException {
+        cleanTables();
+    }
+
+
     @BeforeEach
     void setUp() {
         open("http://localhost:8080");
+        startPage.startPage();
+        startPage.openCreditPage();
+        creditPage.creditPage();
 
     }
+
 
     @Test
     @DisplayName("Успешная обработка данных")
     void shouldSuccessfulDataProcessing() {
         var validCard = DataHelper.getApprovedNumber();
-        StartPage.openCreditPage();
-        detailsCard(validCard);
-        CreditPage.checkSuccessNotification();
+        creditPage.detailsCard(validCard);
+        creditPage.checkSuccessNotification();
         assertEquals("APPROVED", SQLHelper.getLastPayOnCreditUserStatusMySQL());
     }
+
 
     @Test
     @DisplayName("Операция отклонена при вводе валидных данных во всех полях")
     void shouldOperationWasRejectedWhenValidDataWasEnteredInAllFields() {
         var validCard = DataHelper.getDeclinedNumber();
-        StartPage.openCreditPage();
-        detailsCard(validCard);
-        CreditPage.checkDeclineNotification();
-        assertEquals("DECLINED",SQLHelper.getLastPayOnCreditUserStatusMySQL());
+        creditPage.detailsCard(validCard);
+        creditPage.checkErrorNotification();
+        assertEquals("DECLINED", SQLHelper.getLastPayOnCreditUserStatusMySQL());
     }
 
     @Test
     @DisplayName("В поле 'Номер карты' несуществующий номер карты")
     void shouldThereIsANonExistentNumberInTheCardNumberField() {
         var nonExistentCard = DataHelper.getNonExistentNumberCard();
-        StartPage.openCreditPage();
-        detailsCard(nonExistentCard);
-        CreditPage.checkErrorNotification();
-
+        creditPage.detailsCard(nonExistentCard);
+        creditPage.checkErrorNotification();
     }
 
     @Test
     @DisplayName("Недостает символов в номере карты")
     void shouldMissingCharactersInTheCardNumber() {
         var missingCharactersNumberCard = DataHelper.getMissingNumberOfCharactersInTheCardNumber();
-        StartPage.openCreditPage();
-        detailsCard(missingCharactersNumberCard);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(missingCharactersNumberCard);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("Незаполненое поле 'Номер карты'")
     void shouldTheBlankFieldCardNumber() {
         var blankFieldNumber = DataHelper.getEmptyFieldCardNumber();
-        StartPage.openCreditPage();
-        detailsCard(blankFieldNumber);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(blankFieldNumber);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("В поле'Месяц' два ноля")
     void shouldThereAreTwoZerosInTheFieldMonth() {
         var twoZerosInMonth = DataHelper.getThereAreTwoZerosInTheMonthField();
-        StartPage.openCreditPage();
-        detailsCard(twoZerosInMonth);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(twoZerosInMonth);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("В поле 'Месяц' недостаточно цифр")
     void shouldThereAreNotEnoughNumbersInTheMonthField() {
         var notEnoughNumbersMonth = DataHelper.getMonthFieldOneDigitIsZero();
-        StartPage.openCreditPage();
-        detailsCard(notEnoughNumbersMonth);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(notEnoughNumbersMonth);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("Несуществующий месяц")
     void shouldANonExistentMonth() {
         var nonExistentMonth = DataHelper.getThereIsANonEssentialValueInTheField();
-        StartPage.openCreditPage();
-        detailsCard(nonExistentMonth);
-        CreditPage.checkInvalidDate();
+        creditPage.detailsCard(nonExistentMonth);
+        creditPage.checkInvalidDate();
     }
 
     @Test
     @DisplayName("Истекший месяц")
     void shouldThePastMonth() {
-        var pastMonth = DataHelper. getTheLastMonth();
-        StartPage.openCreditPage();
-        detailsCard(pastMonth);
-        CreditPage. checkInvalidDate();
+        var pastMonth = DataHelper.getTheLastMonth();
+        creditPage.detailsCard(pastMonth);
+        creditPage.checkInvalidDate();
     }
 
     @Test
     @DisplayName("Пустое поле 'Месяц'")
     void shouldEmptyMonthField() {
         var emptyMonth = DataHelper.getEmptyMonthField();
-        StartPage.openCreditPage();
-        detailsCard(emptyMonth);
-        CreditPage. checkInvalidFormat();
+        creditPage.detailsCard(emptyMonth);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("В поле 'Год'  истекший срок")
     void shouldInTheYearFieldTheExpiredPeriod() {
         var expiredPeriodYear = DataHelper.getLastYearInTheYearField();
-        StartPage.openCreditPage();
-        detailsCard(expiredPeriodYear);
-        CreditPage.checkExpiredDate();
+        creditPage.detailsCard(expiredPeriodYear);
+        creditPage.checkExpiredDate();
     }
 
     @Test
     @DisplayName("Пустое поле 'Год'")
     void shouldEmptyYearField() {
         var emptyYear = DataHelper.getEmptyYearField();
-        StartPage.openCreditPage();
-        detailsCard(emptyYear);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(emptyYear);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("В поле 'Год' далеко отстоящая дата")
     void shouldYearFieldDateIsFarAway() {
         var dateAway = DataHelper.getAFarOffDate();
-        StartPage.openCreditPage();
-        detailsCard(dateAway);
-        CreditPage.checkInvalidDate();
+        creditPage.detailsCard(dateAway);
+        creditPage.checkInvalidDate();
     }
 
     @Test
     @DisplayName("В поле 'Владелец' только имя")
     void shouldInTheOwnerFieldOnlyTheName() {
         var onlyName = DataHelper.getInTheOwnerFieldOnlyTheName();
-        StartPage.openCreditPage();
-        detailsCard(onlyName);
-        CreditPage.checkInvalidName();
+        creditPage.detailsCard(onlyName);
+        creditPage.checkInvalidName();
     }
 
     @Test
     @DisplayName("В поле 'Владелец'  имя и фамилия через дефис")
     void shouldOwnerFieldFirstAndLastNameSeparatedByAHyphen() {
         var ownerNameSeparatedHyphen = DataHelper.getFirstAndLastNamesSeparatedByHyphens();
-        StartPage.openCreditPage();
-        detailsCard(ownerNameSeparatedHyphen);
-        CreditPage. checkInvalidFormat();
+        creditPage.detailsCard(ownerNameSeparatedHyphen);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("Имя и фамилия из 200 букв")
     void shouldFirstAndLastnameOf200Letters() {
         var longFirstAndLastName = DataHelper.getHolderName200Letters();
-        StartPage.openCreditPage();
-        detailsCard(longFirstAndLastName);
-        CreditPage.checkLongName();
+        creditPage.detailsCard(longFirstAndLastName);
+        creditPage.checkLongName();
     }
 
     @Test
     @DisplayName("В поле 'Владелец' только цифры")
     void shouldThereAreOnlyNumbersInTheOwnerField() {
         var ownerInNumbers = DataHelper.getThereAreOnlyNumbersInTheOwnerField();
-        StartPage.openCreditPage();
-        detailsCard(ownerInNumbers);
-        CreditPage.checkInvalidDataName();
+        creditPage.detailsCard(ownerInNumbers);
+        creditPage.checkInvalidDataName();
     }
 
     @Test
     @DisplayName("В поле 'Владелец' одна буква")
     void shouldThereIsOneLetterInOwnerField() {
         var ownerOneLetter = DataHelper.getThereIsOneLetterInTheOwnerField();
-        StartPage.openCreditPage();
-        detailsCard(ownerOneLetter);
-        CreditPage.checkShortName();
+        creditPage.detailsCard(ownerOneLetter);
+        creditPage.checkShortName();
     }
 
     @Test
     @DisplayName("Пустое поле 'Владелец'")
     void shouldEmptyFieldOwner() {
         var emptyOwnerField = DataHelper.getEmptyOwnerField();
-        StartPage.openCreditPage();
-        detailsCard(emptyOwnerField);
-        CreditPage.checkRequiredField();
+        creditPage.detailsCard(emptyOwnerField);
+        creditPage.checkRequiredField();
     }
 
     @Test
     @DisplayName("Вместо имени и фамилии спецсимволы")
     void shouldSpecialCharactersInsteadOfFirstAndLastName() {
         var specialCharactersName = DataHelper.getSpecialCharactersInsteadOfFirstAndLastNames();
-        StartPage.openCreditPage();
-        detailsCard(specialCharactersName);
-        CreditPage.checkInvalidDataName();
+        creditPage.detailsCard(specialCharactersName);
+        creditPage.checkInvalidDataName();
     }
 
     @Test
     @DisplayName("В поле 'CVC/CVV' одна цифра")
     void shouldThereIsOneDigitInTheCVCField() {
         var oneDigitCVC = DataHelper.getThereIsCVCOneDigitInTheField();
-        StartPage.openCreditPage();
-        detailsCard(oneDigitCVC);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(oneDigitCVC);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("В поле 'CVC' две цифры")
     void shouldThereAreTwoDigitsInTheCVCField() {
         var twoDigitCVC = DataHelper.getThereAreTwoDigitsInTheField();
-        StartPage.openCreditPage();
-        detailsCard(twoDigitCVC);
-        CreditPage.checkInvalidFormat();
+        creditPage.detailsCard(twoDigitCVC);
+        creditPage.checkInvalidFormat();
     }
 
     @Test
     @DisplayName("Пустое поле CVC")
     void shouldEmptyCVCField() {
         var emptyCVC = DataHelper.getTheCVCFieldIsEmpty();
-        StartPage.openCreditPage();
-        detailsCard(emptyCVC);
-        CreditPage.checkRequiredField();
+        creditPage.detailsCard(emptyCVC);
+        creditPage.checkRequiredField();
     }
 
     @Test
-    @DisplayName("Пустая завка")
+    @DisplayName("Пустая заявка")
     void shouldAnEmptyBottle() {
         var emptyBottle = DataHelper.getAllFieldAreEmpty();
-        StartPage.openCreditPage();
-        detailsCard(emptyBottle);
-        CreditPage.checkAllFieldsAreRequired();
+        creditPage.detailsCard(emptyBottle);
+        creditPage.checkAllFieldsAreRequired();
     }
-
 }

@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'
     id 'io.freefair.lombok' version '5.3.0'
 }
 
@@ -10,18 +11,26 @@ sourceCompatibility = 11
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+allure {
+    version = '2.20.1'
+    useJUnit5 {
+        version = '2.20.1'
+    }
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
     testImplementation 'com.codeborne:selenide:6.17.2'
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
     testImplementation 'mysql:mysql-connector-java:8.0.30'
-    implementation group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
     testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+    testImplementation 'io.qameta.allure:allure-selenide:2.20.1'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.33'
 }
 
 test {
@@ -29,6 +38,6 @@ test {
     systemProperty 'selenide.headless', System.getProperty('selenide.headless')
     systemProperty 'db.url', System.getProperty('db.url', "jdbc:mysql://localhost:3306/db")
     systemProperty 'chromeoptions.prefs', System.getProperty('chromeoptions.prefs', "profile.password_manager_leak_detection=false")
-    systemProperty 'username', System.getProperty('username','app')
-    systemProperty 'password', System.getProperty('password','pass')
+    systemProperty 'username', System.getProperty('username', 'app')
+    systemProperty 'password', System.getProperty('password', 'pass')
 }
