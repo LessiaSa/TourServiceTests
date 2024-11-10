@@ -29,11 +29,6 @@ public class CreditPageTests {
         SelenideLogger.removeListener("allure");
     }
 
-    @BeforeAll
-    static void setupClass() {
-        WebDriverManager.chromedriver().setup();
-    }
-
 
     //для очистки базы данных после выполнения всех автотестов(после этого надо перезапустить джарник
     @AfterAll
