@@ -36,6 +36,12 @@ public class CreditPageTests {
         cleanTables();
     }
 
+    @BeforeAll
+    static void setupClass() {
+        WebDriverManager.chromedriver().setup();
+    }
+
+
 
     @BeforeEach
     void setUp() {
